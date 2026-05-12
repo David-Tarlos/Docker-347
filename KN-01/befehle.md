@@ -1,5 +1,8 @@
 # Modul 347 – Teil B: Docker CLI – Erste Schritte
 
+Diese Datei gehört zur Abgabe [`KN-01.md`](./KN-01.md) und listet alle
+verwendeten Docker-CLI-Befehle mit kurzer Erklärung auf.
+
 ## Übersicht der ausgeführten Befehle
 
 ### 1. Docker-Version überprüfen
@@ -16,7 +19,7 @@ docker search ubuntu
 docker search nginx
 ```
 `docker search` durchsucht Docker Hub nach Images. Das offizielle Image
-erkennt man an der Spalte "OFFICIAL" mit dem Eintrag `[OK]`.
+erkennt man in der Spalte **OFFICIAL** am Eintrag `[OK]`.
 
 ---
 
@@ -151,7 +154,8 @@ Voraussetzung: kein Container nutzt das Image mehr.
 ---
 
 ## Abgaben
-- ✅ Diese Datei mit allen Befehlen und Erklärungen
-- ✅ Screenshot 1: nginx-Standardseite unter `http://localhost:8081`
-- ✅ Screenshot 2: `service nginx status` im Container
-- ✅ Screenshot 3: `docker ps -a` mit allen Containern
+
+- [x] Diese Datei mit allen Befehlen und Erklärungen
+- [x] Screenshot 1: nginx-Standardseite unter `http://localhost:8081`
+- [x] Screenshot 2: `service nginx status` im Container
+- [x] Screenshot 3: `docker ps -a` mit allen Containern
