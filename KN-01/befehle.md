@@ -153,9 +153,46 @@ Voraussetzung: kein Container nutzt das Image mehr.
 
 ---
 
+---
+
+## Teil D – Privates Repository
+
+### 11. Am Docker Hub anmelden
+```bash
+docker login
+```
+Authentifiziert die lokale Docker-CLI gegenüber Docker Hub – nötig vor
+jedem `docker push`.
+
+---
+
+### 12. nginx-Image taggen und pushen
+```bash
+docker pull nginx
+docker tag nginx:latest david-tarlos/docker-347:nginx
+docker push david-tarlos/docker-347:nginx
+```
+`docker tag` vergibt einen zusätzlichen Namen für ein vorhandenes Image
+(keine Kopie, gleiche Image-ID). `docker push` lädt das so umbenannte
+Image in das eigene Docker-Hub-Repository hoch.
+
+---
+
+### 13. mariadb-Image taggen und pushen
+```bash
+docker pull mariadb
+docker tag mariadb:latest david-tarlos/docker-347:mariadb
+docker push david-tarlos/docker-347:mariadb
+```
+Gleiches Vorgehen wie bei nginx. Anschliessend enthält das Repository
+`david-tarlos/docker-347` zwei Tags: `nginx` und `mariadb`.
+
+---
+
 ## Abgaben
 
 - [x] Diese Datei mit allen Befehlen und Erklärungen
 - [x] Screenshot 1: nginx-Standardseite unter `http://localhost:8081`
 - [x] Screenshot 2: `service nginx status` im Container
 - [x] Screenshot 3: `docker ps -a` mit allen Containern
+- [ ] Screenshot 4: Docker-Hub-Repository mit Tags `nginx` und `mariadb`
