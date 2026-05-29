@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp \"/mnt/c/Users/Leon/OneDrive - Noser Young AG/Bilder/Screenshots/Screenshot 2026-05-29 081417.png\" /mnt/c/Projects/Docker-347/KN-04/screenshots/kn04a-info.png)",
+      "Bash(cp \"/mnt/c/Users/Leon/OneDrive - Noser Young AG/Bilder/Screenshots/Screenshot 2026-05-29 081458.png\" /mnt/c/Projects/Docker-347/KN-04/screenshots/kn04a-db.png)",
+      "Bash(cp \"/mnt/c/Users/Leon/OneDrive - Noser Young AG/Bilder/Screenshots/Screenshot 2026-05-29 082351.png\" /mnt/c/Projects/Docker-347/KN-04/screenshots/kn04b-info.png)",
+      "Bash(cp \"/mnt/c/Users/Leon/OneDrive - Noser Young AG/Bilder/Screenshots/Screenshot 2026-05-29 082429.png\" /mnt/c/Projects/Docker-347/KN-04/screenshots/kn04b-db-fehler.png)",
+      "Bash(cp \"/mnt/c/Users/Leon/OneDrive - Noser Young AG/Bilder/Screenshots/Screenshot 2026-05-29 090641.png\" /mnt/c/Projects/Docker-347/KN-04/screenshots/kn04-cloud-info.png)",
+      "Bash(cp \"/mnt/c/Users/Leon/OneDrive - Noser Young AG/Bilder/Screenshots/Screenshot 2026-05-29 090701.png\" /mnt/c/Projects/Docker-347/KN-04/screenshots/kn04-cloud-db.png)"
+    ]
+  }
+}

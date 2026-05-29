@@ -1,0 +1,92 @@
+#cloud-config
+
+# AWS Academy injiziert beim Launch den vockey (labsuser.pem) -> Leon kommt darüber rein.
+# Hier zusätzlich der Public Key der Lehrperson für den M347-Cloud-Zugang.
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCUBo+qnNu5xxM9vfz4C04M36FHxHNrEMdm5TkFj1/SfVtqunlUOeMpu7nFCZZKnX8HYwf/MkjcBiTYAgncxku8grwl6XuW/pcvmb6/ghSIaw4xtRRSzit7omqJ5d8kXB3+Nd1aaMHsjfly4nkaqswhySVXQqr8Hw6DbWVw8jLLVKEE+5NZHY33hJkhJwK4blCllsGpmQaKi1qxjsN0hZOWNK01iJAydwD8t2xJ0NOYbq8Qas5IyPnRN7SPxvEhIP6WLQ6Ym6Dmf8FwNW1cHLTKabgjzt5f/HKUkKS89dPd3fn4nnFli1BOMECGUIvVlOw2pQNri7+04OOfn2FGlqr5
+
+package_update: true
+
+packages:
+  - curl
+  - ca-certificates
+
+write_files:
+  # Compose-File: Web wird auf der VM gebaut (kein privates Image -> kein docker login nötig),
+  # DB direkt aus dem öffentlichen mariadb:latest.
+  - path: /opt/m347/docker-compose.yml
+    permissions: '0644'
+    content: |
+      services:
+        web:
+          build:
+            context: .
+            dockerfile: Dockerfile
+          container_name: m347-kn04-cloud-web
+          ports:
+            - "80:80"
+          networks:
+            - kn04-cloud-net
+          depends_on:
+            - db
+        db:
+          image: mariadb:latest
+          container_name: m347-kn04-cloud-db
+          environment:
+            MARIADB_ROOT_PASSWORD: Test1234!
+            MARIADB_DATABASE: m347db
+          networks:
+            - kn04-cloud-net
+      networks:
+        kn04-cloud-net:
+          driver: bridge
+          ipam:
+            config:
+              - subnet: 172.30.0.0/16
+                ip_range: 172.30.5.0/24
+                gateway: 172.30.5.254
+
+  - path: /opt/m347/Dockerfile
+    permissions: '0644'
+    content: |
+      FROM php:8.0-apache
+      RUN docker-php-ext-install mysqli
+      COPY info.php /var/www/html/
+      COPY db.php /var/www/html/
+      EXPOSE 80
+
+  - path: /opt/m347/info.php
+    permissions: '0644'
+    content: |
+      <?php
+      phpinfo();
+
+  - path: /opt/m347/db.php
+    permissions: '0644'
+    content: |
+      <?php
+      $host = 'm347-kn04-cloud-db';
+      $user = 'root';
+      $pass = 'Test1234!';
+      $db   = 'mysql';
+
+      $conn = new mysqli($host, $user, $pass, $db);
+
+      if ($conn->connect_error) {
+          die('Verbindung fehlgeschlagen: ' . $conn->connect_error);
+      }
+
+      echo 'Verbindung zur Datenbank erfolgreich auf Host ' . $host;
+
+      $conn->close();
+
+runcmd:
+  # Docker + Compose-Plugin via offizielles Convenience-Skript (funktioniert auf jeder Ubuntu-Version)
+  - curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+  - sh /tmp/get-docker.sh
+  - systemctl enable --now docker
+  - usermod -aG docker ubuntu
+  # App bauen + starten
+  - cd /opt/m347 && docker compose up -d --build
+
+final_message: "Cloud-Init fertig. App laeuft auf Port 80 -> http://<PUBLIC-IP>/info.php und /db.php"
