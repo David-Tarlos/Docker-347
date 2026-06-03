@@ -1,0 +1,36 @@
+#cloud-config
+# Quelle: TBZ-Anleitung MicroK8s (microk8s.yaml)
+# https://thenewstack.io/deploy-a-kubernetes-cluster-on-ubuntu-server-with-microk8s/
+#
+# Diese Datei ist 1:1 die vom Lehrer bereitgestellte microk8s.yaml.
+# Einziger Zusatz: Leons eigener SSH-Pubkey-Slot (siehe Kommentar).
+
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin, microk8s
+    home: /home/ubuntu
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCUBo+qnNu5xxM9vfz4C04M36FHxHNrEMdm5TkFj1/SfVtqunlUOeMpu7nFCZZKnX8HYwf/MkjcBiTYAgncxku8grwl6XuW/pcvmb6/ghSIaw4xtRRSzit7omqJ5d8kXB3+Nd1aaMHsjfly4nkaqswhySVXQqr8Hw6DbWVw8jLLVKEE+5NZHY33hJkhJwK4blCllsGpmQaKi1qxjsN0hZOWNK01iJAydwD8t2xJ0NOYbq8Qas5IyPnRN7SPxvEhIP6WLQ6Ym6Dmf8FwNW1cHLTKabgjzt5f/HKUkKS89dPd3fn4nnFli1BOMECGUIvVlOw2pQNri7+04OOfn2FGlqr5 teacher
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC0GiuDKHvhb+9mNC9syJLiZIJ3WHdAdOoYAvhyoSOFquhOZi0A/OebCBzGNyxr2Tznh+xz3lb9kMlF/eIs9XYXMBsgYSZM9h2C/iV6CuaAU1rgEUBNrz8cf4pmhwv4akFThnOpWwJQrmvAskqu2tWZP7fEvQtIH0kDqcmLdJP0qtXx3bV+EzIDOgSZB/qVIb0eaWboZQ91Opnf2I0dW4Ucl2NDgwo2wR8q4cGSJRJc6wSxyEDUJakQ2zV2EIUZlXH1i6lVhC22JEMAD1fHSbN6Lc+N9uTvZPrWfnPh+ydaCMYdt0CV3VMzEKq7J12BVrfB6VZNVKbPfT1g5z/aAMl leon-vockey
+
+groups:
+  - microk8s
+
+system_info:
+  default_user:
+    groups: [microk8s]
+
+ssh_pwauth: false
+disable_root: false
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+
+runcmd:
+  - sudo snap install microk8s --classic
+  - mkdir /home/ubuntu/.kube
