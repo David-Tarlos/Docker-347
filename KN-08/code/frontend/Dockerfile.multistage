@@ -1,0 +1,19 @@
+# Stage 1: build the React app
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY app/package*.json ./
+RUN npm install
+COPY app/ ./
+# Build uses .env.production with FRONTEND_MS_* placeholders.
+# Real URLs get substituted at container start via entrypoint.sh.
+RUN npm run build
+
+# Stage 2: serve the optimised bundle via nginx, with runtime env substitution
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+COPY --from=build /app/build .
+# Drop the script into nginx's docker-entrypoint hook directory so it runs
+# before nginx itself starts.
+COPY entrypoint.sh /docker-entrypoint.d/40-replace-env.sh
+RUN chmod +x /docker-entrypoint.d/40-replace-env.sh
+EXPOSE 80

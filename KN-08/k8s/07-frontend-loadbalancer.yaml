@@ -1,0 +1,18 @@
+# Task 10 — externally load-balanced frontend.
+# Apply this AFTER 04-frontend.yaml to flip the service type. MicroK8s without
+# a cloud-controller leaves type=LoadBalancer in "Pending" (no EXTERNAL-IP),
+# so the actual load balancing comes from an external AWS Classic/Network LB
+# that targets the three node EIPs on nodePort 30101.
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30101

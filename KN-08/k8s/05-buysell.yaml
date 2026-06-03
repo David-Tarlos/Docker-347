@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buysell-deployment
+  labels:
+    app: buysell
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buysell
+  template:
+    metadata:
+      labels:
+        app: buysell
+    spec:
+      containers:
+      - name: buysell
+        image: leonwul/m347-kn08:buysell
+        ports:
+        - containerPort: 8002
+        env:
+        - name: ACCOUNT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: m347-config
+              key: ACCOUNT_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buysell-service
+spec:
+  type: NodePort
+  selector:
+    app: buysell
+  ports:
+    - protocol: TCP
+      port: 8002
+      targetPort: 8002
+      nodePort: 30102

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: m347-config
+data:
+  # Database (used by Account)
+  DB_HOST: "m347-kn08-db.cjknyrkikwm0.us-east-1.rds.amazonaws.com"
+  DB_NAME: "m347kn08"
+  DB_USER: "admin"
+
+  # Account URL inside the cluster — used by BuySell + SendReceive
+  ACCOUNT_URL: "http://account-service:8080"
+
+  # Frontend placeholders — substituted into the bundled JS at container start
+  # via the runtime entrypoint script (Task 9). Replace <NODE_EIP> with one of
+  # the cluster's EC2 elastic IPs (or the AWS LB DNS once Task 10 is done).
+  FRONTEND_MS_ACCOUNT_HOLDINGS: "http://54.173.101.0:30100/Account/Cryptos/?userid=<userId>"
+  FRONTEND_MS_ACCOUNT_FRIENDS:  "http://54.173.101.0:30100/Account/Friends/?userid=<userId>"
+  FRONTEND_MS_BUYSELL_BUY:      "http://54.173.101.0:30102/buy"
+  FRONTEND_MS_BUYSELL_SELL:     "http://54.173.101.0:30102/sell"
+  FRONTEND_MS_SENDRECEIVE_SEND: "http://54.173.101.0:30103/send"

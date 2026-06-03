@@ -1,0 +1,42 @@
+# Lokaler End-to-End-Test via Docker Desktop (Task 4/5).
+# Voraussetzung: 'leonwul/m347-kn08:account' wurde lokal mit
+# `docker build -t leonwul/m347-kn08:account ./code/account` gebaut.
+# Database = AWS RDS (Host/User/Pass über appsettings.json im Image),
+# alternativ kannst du hier auch eine MariaDB als Service ergänzen.
+
+services:
+  account:
+    image: leonwul/m347-kn08:account
+    container_name: account
+    ports:
+      - "8080:8080"
+
+  buysell:
+    image: leonwul/m347-kn08:buysell
+    container_name: buysell
+    ports:
+      - "8002:8002"
+    environment:
+      ACCOUNT_URL: "http://account:8080"
+    depends_on:
+      - account
+
+  sendreceive:
+    image: leonwul/m347-kn08:sendreceive
+    container_name: sendreceive
+    ports:
+      - "8003:8003"
+    environment:
+      ACCOUNT_URL: "http://account:8080"
+    depends_on:
+      - account
+
+  frontend:
+    image: leonwul/m347-kn08:frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - account
+      - buysell
+      - sendreceive
